@@ -1,6 +1,3 @@
-USE AllJobsDb;
-GO
-
 IF DB_ID(N'AllJobsDb') IS NULL
 BEGIN
     CREATE DATABASE AllJobsDb;

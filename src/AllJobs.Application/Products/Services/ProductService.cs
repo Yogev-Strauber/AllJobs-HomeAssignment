@@ -4,7 +4,7 @@ using AllJobs.Domain.Products;
 
 namespace AllJobs.Application.Products.Services;
 
-public class ProductService
+public class ProductService : IProductService
 {
     private readonly IProductRepository _productRepository;
 

@@ -22,4 +22,25 @@ public class ProductsController : ControllerBase
 
         return Created($"/api/products/{id}", new { id });
     }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAll()
+    {
+        var products = await _productService.GetAllAsync();
+
+        return Ok(products);
+    }
+
+    [HttpGet("{id:int}")]
+    public async Task<IActionResult> GetById(int id)
+    {
+        var product = await _productService.GetByIdAsync(id);
+
+        if (product is null)
+        {
+            return NotFound();
+        }
+
+        return Ok(product);
+    }
 }

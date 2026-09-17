@@ -28,4 +28,52 @@ public class ProductRepository : IProductRepository
 
         return await connection.QuerySingleAsync<int>(sql, product);
     }
+
+    public async Task<IEnumerable<Product>> GetAllAsync()
+    {
+        const string sql = """
+        SELECT
+            Id,
+            Name,
+            Sku,
+            Description,
+            Price,
+            StockQuantity,
+            Status,
+            CreatedAt,
+            UpdatedAt
+        FROM Products
+        ORDER BY Id;
+        """;
+
+        using var connection = _connectionFactory.CreateConnection();
+
+        return await connection.QueryAsync<Product>(sql);
+    }
+
+    public async Task<Product?> GetByIdAsync(int id)
+    {
+        const string sql = """
+        SELECT
+            Id,
+            Name,
+            Sku,
+            Description,
+            Price,
+            StockQuantity,
+            Status,
+            CreatedAt,
+            UpdatedAt
+        FROM Products
+        WHERE Id = @Id;
+        """;
+
+        using var connection = _connectionFactory.CreateConnection();
+
+        return await connection.QuerySingleOrDefaultAsync<Product>(
+            sql,
+            new { Id = id }
+        );
+    }
+
 }

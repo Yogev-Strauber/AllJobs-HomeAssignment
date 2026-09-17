@@ -6,6 +6,6 @@ namespace AllJobs.Application.Products.Interfaces;
 public interface IProductService
 {
     Task<int> CreateAsync(CreateProductRequest request);
-    Task<IEnumerable<Product>> GetAllAsync();
+    Task<IEnumerable<Product>> GetAllAsync(ProductFilterRequest filter);
     Task<Product?> GetByIdAsync(int id);
 }

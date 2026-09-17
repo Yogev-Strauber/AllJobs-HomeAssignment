@@ -1,3 +1,4 @@
+using AllJobs.Application.Products.DTOs;
 using AllJobs.Application.Products.Interfaces;
 using AllJobs.Domain.Products;
 using AllJobs.Infrastructure.Data;
@@ -29,7 +30,7 @@ public class ProductRepository : IProductRepository
         return await connection.QuerySingleAsync<int>(sql, product);
     }
 
-    public async Task<IEnumerable<Product>> GetAllAsync()
+    public async Task<IEnumerable<Product>> GetAllAsync(ProductFilterRequest filter)
     {
         const string sql = """
         SELECT
@@ -43,14 +44,26 @@ public class ProductRepository : IProductRepository
             CreatedAt,
             UpdatedAt
         FROM Products
+        WHERE
+            (@Search IS NULL
+                OR Name LIKE '%' + @Search + '%'
+                OR Sku LIKE '%' + @Search + '%')
+            AND (@Status IS NULL OR Status = @Status)
         ORDER BY Id;
         """;
 
         using var connection = _connectionFactory.CreateConnection();
 
-        return await connection.QueryAsync<Product>(sql);
+        return await connection.QueryAsync<Product>(
+            sql,
+            new
+            {
+                Search = string.IsNullOrWhiteSpace(filter.Search)
+                    ? null
+                    : filter.Search.Trim(),
+                Status = filter.Status
+            });
     }
-
     public async Task<Product?> GetByIdAsync(int id)
     {
         const string sql = """

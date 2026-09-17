@@ -32,9 +32,9 @@ public class ProductService : IProductService
         return await _productRepository.CreateAsync(product);
     }
 
-    public async Task<IEnumerable<Product>> GetAllAsync()
+    public async Task<IEnumerable<Product>> GetAllAsync(ProductFilterRequest filter)
     {
-        return await _productRepository.GetAllAsync();
+        return await _productRepository.GetAllAsync(filter);
     }
 
     public async Task<Product?> GetByIdAsync(int id)

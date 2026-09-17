@@ -9,4 +9,5 @@ public interface IProductRepository
     Task<IEnumerable<Product>> GetAllAsync(ProductFilterRequest filter);
     Task<Product?> GetByIdAsync(int id);
     Task<bool> UpdateAsync(Product product);
+    Task<bool> UpdateStatusAsync(int id, ProductStatus status);
 }

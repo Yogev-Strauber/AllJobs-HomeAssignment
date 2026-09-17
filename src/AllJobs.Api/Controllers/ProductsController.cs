@@ -56,4 +56,19 @@ public class ProductsController : ControllerBase
 
         return NoContent();
     }
+
+    [HttpPatch("{id:int}/status")]
+    public async Task<IActionResult> UpdateStatus(
+    int id,
+    UpdateProductStatusRequest request)
+    {
+        var updated = await _productService.UpdateStatusAsync(id, request);
+
+        if (!updated)
+        {
+            return NotFound();
+        }
+
+        return NoContent();
+    }
 }

@@ -109,4 +109,28 @@ public class ProductRepository : IProductRepository
 
         return affectedRows > 0;
     }
+
+    public async Task<bool> UpdateStatusAsync(int id, ProductStatus status)
+    {
+        const string sql = """
+        UPDATE Products
+        SET
+            Status = @Status,
+            UpdatedAt = @UpdatedAt
+        WHERE Id = @Id;
+        """;
+
+        using var connection = _connectionFactory.CreateConnection();
+
+        var affectedRows = await connection.ExecuteAsync(
+            sql,
+            new
+            {
+                Id = id,
+                Status = status,
+                UpdatedAt = DateTime.UtcNow
+            });
+
+        return affectedRows > 0;
+    }
 }

@@ -60,4 +60,20 @@ public class ProductService : IProductService
 
         return await _productRepository.UpdateAsync(product);
     }
+
+    public async Task<bool> UpdateStatusAsync(
+    int id,
+    UpdateProductStatusRequest request)
+    {
+        var product = await _productRepository.GetByIdAsync(id);
+
+        if (product is null)
+        {
+            return false;
+        }
+
+        return await _productRepository.UpdateStatusAsync(
+            id,
+            request.Status);
+    }
 }

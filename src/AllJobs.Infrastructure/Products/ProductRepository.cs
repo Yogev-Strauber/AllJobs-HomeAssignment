@@ -89,4 +89,24 @@ public class ProductRepository : IProductRepository
         );
     }
 
+    public async Task<bool> UpdateAsync(Product product)
+    {
+        const string sql = """
+        UPDATE Products
+        SET
+            Name = @Name,
+            Sku = @Sku,
+            Description = @Description,
+            Price = @Price,
+            StockQuantity = @StockQuantity,
+            UpdatedAt = @UpdatedAt
+        WHERE Id = @Id;
+        """;
+
+        using var connection = _connectionFactory.CreateConnection();
+
+        var affectedRows = await connection.ExecuteAsync(sql, product);
+
+        return affectedRows > 0;
+    }
 }

@@ -8,4 +8,5 @@ public interface IProductService
     Task<int> CreateAsync(CreateProductRequest request);
     Task<IEnumerable<Product>> GetAllAsync(ProductFilterRequest filter);
     Task<Product?> GetByIdAsync(int id);
+    Task<bool> UpdateAsync(int id, UpdateProductRequest request);
 }

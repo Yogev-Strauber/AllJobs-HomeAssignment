@@ -41,4 +41,23 @@ public class ProductService : IProductService
     {
         return await _productRepository.GetByIdAsync(id);
     }
+
+    public async Task<bool> UpdateAsync(int id, UpdateProductRequest request)
+    {
+        var product = await _productRepository.GetByIdAsync(id);
+
+        if (product is null)
+        {
+            return false;
+        }
+
+        product.Name = request.Name;
+        product.Sku = request.Sku;
+        product.Description = request.Description;
+        product.Price = request.Price;
+        product.StockQuantity = request.StockQuantity;
+        product.UpdatedAt = DateTime.UtcNow;
+
+        return await _productRepository.UpdateAsync(product);
+    }
 }

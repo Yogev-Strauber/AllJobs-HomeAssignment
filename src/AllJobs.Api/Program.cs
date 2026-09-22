@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using AllJobs.Application.Identity.Repositories;
 using AllJobs.Application.Identity.Services;
+using Microsoft.OpenApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,8 +43,21 @@ builder.Services
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("bearer", new OpenApiSecurityScheme
+    {
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        Description = "JWT Authorization header using the Bearer scheme."
+    });
+
+    options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
+    {
+        [new OpenApiSecuritySchemeReference("bearer", document)] = []
+    });
+}); builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
 var jwtKey = builder.Configuration["Jwt:Key"]
@@ -70,7 +84,7 @@ builder.Services
             ValidAudience = jwtAudience,
 
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(jwtKey)),
+        Encoding.UTF8.GetBytes(jwtKey)),
 
             ClockSkew = TimeSpan.Zero
         };
@@ -86,20 +100,16 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-}
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
     app.MapOpenApi();
 }
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllers();
 
 app.Run();

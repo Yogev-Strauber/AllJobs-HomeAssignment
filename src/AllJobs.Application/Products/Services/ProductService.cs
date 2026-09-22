@@ -19,9 +19,9 @@ public class ProductService : IProductService
 
         var product = new Product
         {
-            Name = request.Name,
-            Sku = request.Sku,
-            Description = request.Description,
+            Name = request.Name.Trim(),
+            Sku = request.Sku.Trim(),
+            Description = request.Description?.Trim(),
             Price = request.Price,
             StockQuantity = request.StockQuantity,
             Status = ProductStatus.Active,
@@ -51,9 +51,9 @@ public class ProductService : IProductService
             return false;
         }
 
-        product.Name = request.Name;
-        product.Sku = request.Sku;
-        product.Description = request.Description;
+        product.Name = request.Name.Trim();
+        product.Sku = request.Sku.Trim();
+        product.Description = request.Description?.Trim();
         product.Price = request.Price;
         product.StockQuantity = request.StockQuantity;
         product.UpdatedAt = DateTime.UtcNow;

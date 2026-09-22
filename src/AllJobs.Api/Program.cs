@@ -26,7 +26,7 @@ builder.Services
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.Converters.Add(
-            new JsonStringEnumConverter());
+            new JsonStringEnumConverter(allowIntegerValues: false));
     });
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi

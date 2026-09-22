@@ -3,6 +3,7 @@ using AllJobs.Application.Products.Services;
 using AllJobs.Infrastructure.Data;
 using AllJobs.Infrastructure.Products;
 using System.Text.Json.Serialization;
+using AllJobs.Api.Exceptions;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -32,8 +33,12 @@ builder.Services
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 var app = builder.Build();
+
+app.UseExceptionHandler();
 
 if (app.Environment.IsDevelopment())
 {

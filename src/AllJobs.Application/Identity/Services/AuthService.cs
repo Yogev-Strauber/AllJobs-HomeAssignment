@@ -10,16 +10,21 @@ public class AuthService : IAuthService
 {
     private readonly IUserRepository _userRepository;
     private readonly IPasswordHashService _passwordHashService;
+    private readonly ITokenService _tokenService;
 
     public AuthService(
         IUserRepository userRepository,
-        IPasswordHashService passwordHashService)
+        IPasswordHashService passwordHashService,
+            ITokenService tokenService)
+
     {
         _userRepository = userRepository;
         _passwordHashService = passwordHashService;
+        _tokenService = tokenService;
+
     }
 
-    public async Task<int> RegisterAsync(RegisterRequest request)
+    public async Task<AuthResult> RegisterAsync(RegisterRequest request)
     {
         var email = request.Email.Trim().ToLowerInvariant();
 
@@ -49,6 +54,53 @@ public class AuthService : IAuthService
             user,
             request.Password);
 
-        return await _userRepository.CreateAsync(user);
+        user.Id = await _userRepository.CreateAsync(user);
+
+        var accessToken = _tokenService.CreateAccessToken(user);
+
+        return CreateAuthResult(user, accessToken);
     }
+
+    public async Task<AuthResult> LoginAsync(LoginRequest request)
+    {
+        var email = request.Email.Trim().ToLowerInvariant();
+
+        var user = await _userRepository.GetByEmailAsync(email);
+
+        if (user is null)
+        {
+            throw new UserNotFoundException(email);
+        }
+
+        var passwordIsValid = _passwordHashService.Verify(
+            user,
+            user.PasswordHash,
+            request.Password);
+
+        if (!passwordIsValid)
+        {
+            throw new InvalidCredentialsException();
+        }
+
+        var accessToken = _tokenService.CreateAccessToken(user);
+
+        return CreateAuthResult(user, accessToken);
+    }
+
+
+    private static AuthResult CreateAuthResult(
+        User user,
+        string accessToken)
+    {
+        return new AuthResult
+        {
+            AccessToken = accessToken,
+            UserId = user.Id,
+            Email = user.Email,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Role = user.Role
+        };
+    }
+
 }

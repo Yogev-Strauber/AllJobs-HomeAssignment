@@ -1,11 +1,14 @@
 using AllJobs.Application.Products.DTOs;
 using AllJobs.Application.Products.Interfaces;
+using AllJobs.Domain.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AllJobs.Api.Controllers;
 
 [ApiController]
 [Route("api/products")]
+[Authorize]
 public class ProductsController : ControllerBase
 {
     private readonly IProductService _productService;
@@ -16,15 +19,19 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = nameof(UserRole.Admin))]
     public async Task<IActionResult> Create(CreateProductRequest request)
     {
         var id = await _productService.CreateAsync(request);
 
-        return Created($"/api/products/{id}", new { id });
+        return Created(
+            $"/api/products/{id}",
+            new { id });
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll([FromQuery] ProductFilterRequest filter)
+    public async Task<IActionResult> GetAll(
+        [FromQuery] ProductFilterRequest filter)
     {
         var products = await _productService.GetAllAsync(filter);
 
@@ -45,7 +52,10 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> Update(int id, UpdateProductRequest request)
+    [Authorize(Roles = nameof(UserRole.Admin))]
+    public async Task<IActionResult> Update(
+        int id,
+        UpdateProductRequest request)
     {
         var updated = await _productService.UpdateAsync(id, request);
 
@@ -58,9 +68,10 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPatch("{id:int}/status")]
+    [Authorize(Roles = nameof(UserRole.Admin))]
     public async Task<IActionResult> UpdateStatus(
-    int id,
-    UpdateProductStatusRequest request)
+        int id,
+        UpdateProductStatusRequest request)
     {
         var updated = await _productService.UpdateStatusAsync(id, request);
 

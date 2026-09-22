@@ -4,5 +4,8 @@ namespace AllJobs.Application.Identity.Services;
 
 public interface IAuthService
 {
-    Task<int> RegisterAsync(RegisterRequest request);
+    Task<AuthResult> RegisterAsync(RegisterRequest request);
+
+    Task<AuthResult> LoginAsync(LoginRequest request);
+
 }

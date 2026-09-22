@@ -3,6 +3,8 @@ using AllJobs.Application.Products.Interfaces;
 using AllJobs.Domain.Products;
 using AllJobs.Infrastructure.Data;
 using Dapper;
+using AllJobs.Application.Products.Exceptions;
+using Microsoft.Data.SqlClient;
 
 namespace AllJobs.Infrastructure.Products;
 
@@ -26,8 +28,17 @@ public class ProductRepository : IProductRepository
             """;
 
         using var connection = _connectionFactory.CreateConnection();
+        try
+        {
+            return await connection.QuerySingleAsync<int>(sql, product);
+        }
+        catch (SqlException ex) when (
+            ex.Number is SqlServerErrorNumbers.UniqueIndexViolation
+                or SqlServerErrorNumbers.UniqueConstraintViolation)
+        {
+            throw new DuplicateProductSkuException(product.Sku, ex);
+        }
 
-        return await connection.QuerySingleAsync<int>(sql, product);
     }
 
     public async Task<IEnumerable<Product>> GetAllAsync(ProductFilterRequest filter)
@@ -105,9 +116,17 @@ public class ProductRepository : IProductRepository
 
         using var connection = _connectionFactory.CreateConnection();
 
-        var affectedRows = await connection.ExecuteAsync(sql, product);
-
-        return affectedRows > 0;
+        try
+        {
+            var affectedRows = await connection.ExecuteAsync(sql, product);
+            return affectedRows > 0;
+        }
+        catch (SqlException ex) when (
+            ex.Number is SqlServerErrorNumbers.UniqueIndexViolation
+                or SqlServerErrorNumbers.UniqueConstraintViolation)
+        {
+            throw new DuplicateProductSkuException(product.Sku, ex);
+        }
     }
 
     public async Task<bool> UpdateStatusAsync(int id, ProductStatus status)

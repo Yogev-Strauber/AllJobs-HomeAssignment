@@ -226,9 +226,7 @@ public class OrderRepository : IOrderRepository
         return order;
     }
 
-    public async Task<bool> UpdateStatusAsync(
-        int id,
-        OrderStatus status)
+    public async Task<bool> UpdateStatusAsync(int id, OrderStatus status)
     {
         using var connection = _connectionFactory.CreateConnection();
         await connection.OpenAsync();

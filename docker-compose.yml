@@ -93,6 +93,8 @@ services:
     build:
       context: ./client
       dockerfile: Dockerfile
+      args:
+        BACKEND_API_URL: http://api:8080
     container_name: alljobs-frontend
     ports:
       - "3000:3000"

@@ -12,6 +12,9 @@ using Microsoft.IdentityModel.Tokens;
 using AllJobs.Application.Identity.Repositories;
 using AllJobs.Application.Identity.Services;
 using Microsoft.OpenApi;
+using AllJobs.Application.Orders.Repositories;
+using AllJobs.Application.Orders.Services;
+using AllJobs.Infrastructure.Orders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +32,8 @@ builder.Services.AddScoped<ITokenService, JwtTokenService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPasswordHashService, PasswordHashService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
 // Add services to the container.
 

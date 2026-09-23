@@ -89,5 +89,18 @@ services:
       db-init:
         condition: service_completed_successfully
 
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: alljobs-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      BACKEND_API_URL: http://api:8080
+    depends_on:
+      api:
+        condition: service_started
+
 volumes:
   alljobs-sql-data:

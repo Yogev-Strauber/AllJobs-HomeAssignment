@@ -51,6 +51,7 @@ docker compose up --build
 ```
 
 Docker Compose starts SQL Server, initializes the database and seed data, and starts the backend API.
+The frontend is also built and started by Compose.
 
 ## Service URLs
 
@@ -58,6 +59,7 @@ Docker Compose starts SQL Server, initializes the database and seed data, and st
 |---|---|
 | Backend API | http://localhost:8080 |
 | Swagger UI | http://localhost:8080/swagger/index.html |
+| Frontend | http://localhost:3000 |
 | SQL Server | localhost:1433 |
 
 ## Test Users
@@ -218,9 +220,32 @@ Client technology:
 ```text
 Next.js
 React
+TypeScript
 ```
 
 Backend authorization remains the source of truth for permissions.
+
+The frontend lives in `client/` and uses the Next.js App Router. It provides login and registration, role-aware product and order management, and the Admin-only order creation workflow. Browser requests use relative `/api/...` paths; Next.js proxies them server-side to `BACKEND_API_URL` so the Docker-only `api` hostname is never exposed to browser code.
+
+For local development, create `client/.env.local`:
+
+```env
+BACKEND_API_URL=http://localhost:8080
+```
+
+When running with Docker Compose, the frontend service sets:
+
+```env
+BACKEND_API_URL=http://api:8080
+```
+
+Start the complete application with:
+
+```bash
+docker compose up --build
+```
+
+Then open `http://localhost:3000`.
 
 ---
 

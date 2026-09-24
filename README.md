@@ -7,7 +7,8 @@ Full-stack product and order management system built with .NET 10, SQL Server, J
 ### Prerequisites
 
 - Git
-- Docker Desktop
+- Docker Desktop with Docker Compose enabled
+- Docker Desktop running before starting the application
 
 ### 1. Clone the repository
 

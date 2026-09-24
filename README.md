@@ -20,9 +20,13 @@ cd AllJobs-HomeAssignment
 
 Copy the example file:
 
+You can create the `.env` file using the following PowerShell command for convenience:
+
 ```powershell
 Copy-Item .env.example .env
 ```
+
+If you prefer not to use PowerShell, create a file named `.env` in the project root manually and copy the contents of `.env.example` into it.
 
 
 The provided `.env.example` contains the required local development values:

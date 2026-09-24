@@ -18,25 +18,39 @@ cd AllJobs-HomeAssignment
 
 ### 2. Create `.env`
 
-Copy the example file:
+Create the `.env` file using **one** of the following methods only.
 
-You can create the `.env` file using the following PowerShell command for convenience:
+#### Option 1 — PowerShell
 
 ```powershell
 Copy-Item .env.example .env
 ```
 
-If you prefer not to use PowerShell, create a file named `.env` in the project root manually and copy the contents of `.env.example` into it.
+#### Option 2 — Command Prompt
 
+```cmd
+copy .env.example .env
+```
 
-The provided `.env.example` contains the required local development values:
+#### Option 3 — macOS / Linux / Git Bash
+
+```bash
+cp .env.example .env
+```
+
+#### Option 4 — Manual creation
+
+Create a file named `.env` in the project root with the following content:
 
 ```env
 MSSQL_SA_PASSWORD=AllJobsLocal123!
 JWT_KEY=AllJobsLocalDevelopmentJwtKey_2026_ChangeMe_1234567890!
 ```
 
-Copying `.env.example` to `.env` is enough to run the project locally.
+**Use only one of the options above.**
+Each option creates the required .env file,
+and once .env.example has been copied to .env (or created manually with the same values),
+the project is ready to run locally.
 
 > `.env` is excluded from Git.
 

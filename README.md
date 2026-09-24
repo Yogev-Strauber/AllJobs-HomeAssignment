@@ -24,23 +24,15 @@ Copy the example file:
 Copy-Item .env.example .env
 ```
 
-Required variables:
+
+The provided `.env.example` contains the required local development values:
 
 ```env
-MSSQL_SA_PASSWORD=<strong-password>
-JWT_KEY=<jwt-signing-key>
+MSSQL_SA_PASSWORD=AllJobsLocal123!
+JWT_KEY=AllJobsLocalDevelopmentJwtKey_2026_ChangeMe_1234567890!
 ```
 
-Generate a JWT signing key in PowerShell:
-
-```powershell
-$bytes = New-Object byte[] 64
-$rng = [System.Security.Cryptography.RandomNumberGenerator]::Create()
-$rng.GetBytes($bytes)
-[Convert]::ToBase64String($bytes)
-```
-
-Paste the generated value into `JWT_KEY`.
+Copying `.env.example` to `.env` is enough to run the project locally.
 
 > `.env` is excluded from Git.
 
@@ -49,6 +41,7 @@ Paste the generated value into `JWT_KEY`.
 ```bash
 docker compose up --build
 ```
+
 
 Docker Compose starts SQL Server, initializes the database and seed data, and starts the backend API.
 The frontend is also built and started by Compose.

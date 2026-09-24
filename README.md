@@ -227,7 +227,7 @@ Runtime order creation still performs normal stock deduction, and runtime cancel
 
 # Frontend
 
-Client technology:
+Client technologies:
 
 ```text
 Next.js
@@ -272,3 +272,13 @@ Then open `http://localhost:3000`.
 - Seeded stock represents the state after seeded historical orders were processed.
 - Swagger is intentionally exposed in the Docker environment to make API review and testing easy.
 - An unknown login email is returned distinctly so the client can redirect the user to registration, as required by the assignment.
+
+
+## Future Improvements
+
+All required core functionality is implemented.
+
+With additional development time, I would focus on the following improvements:
+- Automated unit and integration tests.
+- Additional frontend UX polish and edge-case handling.
+- Optional bonus features such as pagination, inventory reporting, and Admin user management.

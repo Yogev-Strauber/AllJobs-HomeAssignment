@@ -62,7 +62,9 @@ builder.Services.AddSwaggerGen(options =>
     {
         [new OpenApiSecuritySchemeReference("bearer", document)] = []
     });
-}); builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+});
+
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
 var jwtKey = builder.Configuration["Jwt:Key"]

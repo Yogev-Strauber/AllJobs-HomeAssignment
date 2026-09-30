@@ -57,14 +57,25 @@ the project is ready to run locally.
 
 ### 3. Run the application
 
+For the first run, or after changing dependencies or Docker configuration:
+
 ```bash
 docker compose up --build
 ```
 
+For subsequent runs, when no rebuild is required:
 
-Docker Compose starts SQL Server, initializes the database and seed data, and starts the backend API.
-The frontend is also built and started by Compose.
+```bash
+docker compose up
+```
 
+If the existing containers are stopped and you only want to start them again:
+
+```bash
+docker compose start
+```
+
+Docker Compose runs the SQL Server, database initialization and seed data, backend API, and frontend services.
 ## Service URLs
 
 | Service | URL |
